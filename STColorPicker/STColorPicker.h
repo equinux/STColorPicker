@@ -9,5 +9,7 @@
 @interface STColorPicker : UIView
 
 @property (nonatomic, copy) void (^colorHasChanged)(UIColor *color, CGPoint location);
+@property (nonatomic, weak) UIImage *colorMap;
+@property (nonatomic, assign) BOOL showGlass;
 
 @end

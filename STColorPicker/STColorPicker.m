@@ -19,27 +19,46 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
-    if (frame.size.height > 500)
-        frame.size.height = 500;
-    
-    if (frame.size.width > 500)
-        frame.size.width = 500;
-    
     self = [super initWithFrame:frame];
-    
-    if (self) {
-        _pickerImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"colormap"]];
-        _pickerImageView.frame = self.bounds;
-        [self addSubview:_pickerImageView];
-        
-        _glass = [[STGlass alloc] initWithFrame:CGRectMake(0.0, 0.0, 18.0, 18.0)];
-        _glass.alpha = 1.0;
-        [self addSubview:_glass];
 
-        _resizedImage = [self resizeImage:_pickerImageView.image width:self.frame.size.width height:self.frame.size.height];
+    if (self) {
+        self.colorMap = [UIImage imageNamed:@"colormap"];
+        self.showGlass = YES;
     }
     
     return self;
+}
+    
+- (void)setColorMap:(UIImage *)colorMap
+{
+    if (_pickerImageView) {
+        [_pickerImageView removeFromSuperview];
+        _pickerImageView = nil;
+    }
+
+    _colorMap = colorMap;
+
+    _pickerImageView = [[UIImageView alloc] initWithImage:colorMap];
+    _pickerImageView.frame = self.bounds;
+    [self addSubview:_pickerImageView];
+    _resizedImage = [self resizeImage:_pickerImageView.image width:self.frame.size.width height:self.frame.size.height];
+}
+
+- (void)setShowGlass:(BOOL)showGlass
+{
+    _showGlass = showGlass;
+    if (!showGlass && _glass) {
+        [_glass removeFromSuperview];
+        _glass = nil;
+        return;
+    }
+
+    if (showGlass && !_glass) {
+        _glass = [[STGlass alloc] initWithFrame:CGRectMake(0.0, 0.0, 18.0, 18.0)];
+        _glass.alpha = 1.0;
+        [self addSubview:_glass];
+        return;
+    }
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
